@@ -3,7 +3,9 @@ import Driver from "../Driver";
 
 interface PulserOptions {
     interfaces: string[],
-    number?: 100
+    number?: number,
+    intensity?: number,
+    speed?: number
 }
 
 class PulserLed {
@@ -12,9 +14,8 @@ class PulserLed {
         readonly f: number
     ) {}
 
-    nextColor(t: number): number {
-        const brightness = 0xFF & Math.max(0, 255 * (Math.sin(this.f * t / 1000)));
-        return brightness
+    nextColor(t: number, intensity: number = 1, speed: number = 1): number {
+        return 0xFF & Math.max(0, 255 * (Math.sin(this.f * t / 1000))) * intensity
     }
 }
 
@@ -30,23 +31,25 @@ export class Pulser extends BaseState {
 
         for (let i=0; i < (this.options.number || 100); i++) {
             this.pulsers.push(
-                new PulserLed(i, 5 * Math.random())
+                new PulserLed(i, 5 * Math.random() * (this.options.speed || 1))
             )
         }
 
-        this.buffer = Buffer.allocUnsafe((this.options.number || 100)*4)
+        this.buffer = Buffer.allocUnsafe((this.options.number || 100)*3)
     }
 
-    executeStateFrame(driver: Driver, t: number, dt: number, ddt: number): Promise<void> {
+    async executeStateFrame(driver: Driver, t: number, dt: number, ddt: number): Promise<any> {
         for (let PulserLed of this.pulsers) {
-            let c = PulserLed.nextColor(t)
+            let c = PulserLed.nextColor(t, this.options.intensity || 1)
             this.buffer.writeUInt16BE(c | c << 8, PulserLed.n*3)
             this.buffer.writeUInt8(c, PulserLed.n*3+2)
         }
 
+        let Promises = []
+
         for (let DriverInterface of this.options.interfaces) {
-            driver.getInterface(DriverInterface).setBuffer(this.buffer)
+            Promises.push(driver.getInterface(DriverInterface).setBuffer(this.buffer))
         }
-        return Promise.resolve(undefined);
+        return Promise.all(Promises);
     }
 }

@@ -37,8 +37,11 @@ Proto.addStates([
         "Pulser",
         {
             interfaces: [
-                "TextInterface"
-            ]
+                "Front P3 Matrices"
+            ],
+            number: 1024,
+            intensity: 0.1,
+            speed: 0.2
         }
     )
 ])

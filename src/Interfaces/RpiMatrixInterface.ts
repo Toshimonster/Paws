@@ -8,7 +8,7 @@ interface RpiMatrixInterfaceOptions {
 
 export class RpiMatrixInterface extends BaseInterface {
     private readonly Matrix: Matrix.LedMatrixInstance
-    private readonly Buffer: Buffer
+    private readonly size: number
 
     static defaultMatrixOptions = Matrix.LedMatrix.defaultMatrixOptions
     static defaultRuntimeOptions = Matrix.LedMatrix.defaultRuntimeOptions
@@ -16,11 +16,13 @@ export class RpiMatrixInterface extends BaseInterface {
     constructor(name, readonly options?:RpiMatrixInterfaceOptions) {
         super(name);
         this.Matrix = new Matrix.LedMatrix(options.matrixOpts, options.runtimeOpts)
-        this.Buffer = Buffer.allocUnsafe(this.Matrix.height() * this.Matrix.width() * 3)
+        this.size = this.Matrix.height() * this.Matrix.width() * 3
     }
 
     async setBuffer(buffer: Buffer): Promise<void> {
-        this.Matrix.height()
-        this.Matrix.drawBuffer(buffer)
+        const slicedBuffer = buffer.slice(0, this.size)
+        this.Matrix.drawBuffer(slicedBuffer)
+        this.Matrix.sync()
+        //await new Promise(resolve => setTimeout(resolve, 1))
     }
 }

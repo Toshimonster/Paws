@@ -3,13 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "ip": "192.168.1.234",
+    "scp_user": "toshi",
+    "directory": "~/PAWS/"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "uploadToPi": "ncftpput -R -v -u 'Toshi' -p "
+    "build": "tsc",
+    "uploadToPi": "scp -rp ./build/* toshi@192.168.1.234:~/PAWS/",
+    "runOnPi": "ssh 192.168.1.234 \"cd ~/PAWS/ && sudo pm2 start ./main\"",
+    "buildAndSend": "npm run build && npm run uploadToPi",
+    "buildSendAndRun": "npm run buildAndSend && npm run runOnPi"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GNU",
   "repository": "https://github.com/Toshimonster/Paws",
   "devDependencies": {
     "@types/node": "^15.3.1",
@@ -17,6 +26,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "@gbkwiatt/node-rpi-ws281x-native": "^1.0.1",
     "chalk": "^4.1.1",
     "omggif": "^1.0.10",
     "rpi-led-matrix": "^1.11.1"
