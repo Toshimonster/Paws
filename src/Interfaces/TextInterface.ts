@@ -1,5 +1,5 @@
 import {BaseInterface} from "./BaseInterface";
-import chalk from "Chalk";
+import chalk from "chalk";
 
 interface TextInterfaceOptions {
     x: number,

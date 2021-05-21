@@ -1,8 +1,17 @@
-import Driver from "./Driver";
 import * as Interfaces from './Interfaces'
 import * as States from './States'
+import Driver from "./Driver";
 
-Object.defineProperty(Driver, "Interfaces", {
+const Paws = {
+    States: States,
+    Interfaces: Interfaces,
+    Driver: Driver
+}
+
+export = Paws
+
+
+/*Object.defineProperty(Driver, "Interfaces", {
     configurable: false,
     enumerable: false,
     value: Interfaces
@@ -15,4 +24,4 @@ Object.defineProperty(Driver, "States", {
 })
 
 Driver.default = Driver
-export = Driver
+export = Paws*/

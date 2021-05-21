@@ -1,2 +1,7 @@
-export * from './BaseInterface'
-export * from './TextInterface'
+export {BaseInterface} from './BaseInterface'
+export {
+TextInterface
+} from './TextInterface'
+export {
+RpiMatrixInterface
+} from './RpiMatrixInterface'

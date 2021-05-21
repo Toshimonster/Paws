@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "uploadToPi": "ncftpput -R -v -u 'Toshi' -p "
   },
   "keywords": [],
   "author": "",

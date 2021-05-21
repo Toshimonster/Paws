@@ -1,16 +1,33 @@
 import Paws from './index'
+import {Interface} from "readline";
 
-const Proto = new Paws({
+const Proto = new Paws.Driver({
     showFPS: true
 })
 
 Proto.addInterfaces([
     new Paws.Interfaces.TextInterface(
-        "TextInterface",
+        "TestInterface",
         {
             y: 10,
             x: 10,
             symbol: "!"
+        }
+    ),
+
+    new Paws.Interfaces.RpiMatrixInterface(
+        "Front P3 Matrices",
+        {
+            matrixOpts: {
+                rows: 64,
+                cols: 64,
+                chainLength: 2,
+                ...Paws.Interfaces.RpiMatrixInterface.defaultMatrixOptions()
+            },
+            runtimeOpts: {
+                dropPrivileges: false,
+                ...Paws.Interfaces.RpiMatrixInterface.defaultRuntimeOptions()
+            }
         }
     )
 ])
@@ -19,11 +36,6 @@ Proto.addStates([
     new Paws.States.Pulser(
         "Pulser",
         {
-            color: {
-                r: 255,
-                g: 0,
-                b: 100
-            },
             interfaces: [
                 "TextInterface"
             ]
