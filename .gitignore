@@ -105,3 +105,6 @@ dist
 
 # Webstorm files
 .idea
+
+# Typescript build files
+build/
