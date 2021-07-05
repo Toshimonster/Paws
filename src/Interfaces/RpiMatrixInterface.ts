@@ -1,6 +1,5 @@
 import {BaseInterface} from "./BaseInterface";
 import * as Matrix from "rpi-led-matrix"
-import assert from 'assert';
 
 interface RpiMatrixInterfaceOptions {
     matrixOpts: Matrix.MatrixOptions,
@@ -9,21 +8,22 @@ interface RpiMatrixInterfaceOptions {
 
 export class RpiMatrixInterface extends BaseInterface {
     private readonly Matrix: Matrix.LedMatrixInstance
-    private readonly size: number
+    private readonly Buffer: Buffer
 
-    static defaultMatrixOptions = Matrix.LedMatrix.defaultMatrixOptions
-    static defaultRuntimeOptions = Matrix.LedMatrix.defaultRuntimeOptions
-
-    constructor(name, readonly options?:RpiMatrixInterfaceOptions) {
+    constructor(name, readonly options:RpiMatrixInterfaceOptions) {
         super(name);
-        this.Matrix = new Matrix.LedMatrix(options.matrixOpts, options.runtimeOpts)
-        this.size = this.Matrix.height() * this.Matrix.width() * 3
+        this.Matrix = new Matrix.LedMatrix({
+            ...options.matrixOpts,
+            ...Matrix.LedMatrix.defaultMatrixOptions()
+            }, {
+            ...options.runtimeOpts,
+            ...Matrix.LedMatrix.defaultRuntimeOptions()
+            })
+        this.Buffer = Buffer.allocUnsafe(this.Matrix.height() * this.Matrix.width() * 3)
     }
 
     async setBuffer(buffer: Buffer): Promise<void> {
-        assert(buffer.length >= this.size, `The buffer given to the interface '${this.name}' is too short`)
-        const slicedBuffer = buffer.slice(0, this.size)
-        this.Matrix.drawBuffer(slicedBuffer)
-        this.Matrix.sync()
+        this.Matrix.height()
+        this.Matrix.drawBuffer(buffer)
     }
 }
