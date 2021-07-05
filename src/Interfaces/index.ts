@@ -5,3 +5,6 @@ TextInterface
 export {
 RpiMatrixInterface
 } from './RpiMatrixInterface'
+export {
+    Ws281xInterface
+} from './Ws281xInterface'

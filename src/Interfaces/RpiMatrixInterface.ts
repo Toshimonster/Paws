@@ -1,5 +1,6 @@
 import {BaseInterface} from "./BaseInterface";
 import * as Matrix from "rpi-led-matrix"
+import assert from 'assert';
 
 interface RpiMatrixInterfaceOptions {
     matrixOpts: Matrix.MatrixOptions,
@@ -20,9 +21,9 @@ export class RpiMatrixInterface extends BaseInterface {
     }
 
     async setBuffer(buffer: Buffer): Promise<void> {
+        assert(buffer.length >= this.size, `The buffer given to the interface '${this.name}' is too short`)
         const slicedBuffer = buffer.slice(0, this.size)
         this.Matrix.drawBuffer(slicedBuffer)
         this.Matrix.sync()
-        //await new Promise(resolve => setTimeout(resolve, 1))
     }
 }

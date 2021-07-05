@@ -1,7 +1,11 @@
 import Paws from './index'
 import {Interface} from "readline";
 
-const Proto = new Paws.Driver({
+import {Controller} from "./Server";
+
+const CTL = new Controller()
+
+/*const Proto = new Paws.Driver({
     showFPS: true
 })
 
@@ -19,15 +23,25 @@ Proto.addInterfaces([
         "Front P3 Matrices",
         {
             matrixOpts: {
-                rows: 64,
+                ...Paws.Interfaces.RpiMatrixInterface.defaultMatrixOptions(),
+
+                rows: 32,
                 cols: 64,
-                chainLength: 2,
-                ...Paws.Interfaces.RpiMatrixInterface.defaultMatrixOptions()
+                chainLength: 2
             },
             runtimeOpts: {
-                dropPrivileges: false,
-                ...Paws.Interfaces.RpiMatrixInterface.defaultRuntimeOptions()
+                ...Paws.Interfaces.RpiMatrixInterface.defaultRuntimeOptions(),
+                gpioSlowdown: 1,
+                dropPrivileges: 0,
             }
+        }
+    ),
+
+    new Paws.Interfaces.Ws281xInterface(
+        "Ws2812b", 378, {
+            gpio: 21,
+            stripType: 'ws2812',
+            brightness: 10
         }
     )
 ])
@@ -37,16 +51,15 @@ Proto.addStates([
         "Pulser",
         {
             interfaces: [
-                "Front P3 Matrices"
+                "Front P3 Matrices",
+                "Ws2812b",
             ],
-            number: 1024,
-            intensity: 0.1,
-            speed: 0.2
+            number: 4096,
+            intensity: 0.2,
+            speed: 1
         }
     )
 ])
-
-console.log("hi")
 
 Proto.setState("Pulser")
 
@@ -54,4 +67,4 @@ Proto.on('ready', (driver) => {
     console.log('Ready!')
 })
 
-Proto.start()
+Proto.start()*/

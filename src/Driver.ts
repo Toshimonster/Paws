@@ -12,12 +12,18 @@ export default class Driver extends events.EventEmitter {
 
     private animationLoopCondition: boolean = false
     private animationLoopStart: number = 0
+    private static readonly fpsUpdateEveryXFrames: number = 100
+    private frame: number = 0
+
     private readonly animationLoop = async (driver: Driver, old_dt = 0) => {
         const t = performance.now()
         const dt = t - driver.animationLoopStart
         const ddt = dt - old_dt
+        this.frame ++
 
-        if (this.options?.showFPS) console.log(`FPS: ${1 / ddt * 1e3}`);
+        if (this.options?.showFPS && this.frame % Driver.fpsUpdateEveryXFrames === 0) {
+            console.log(`FPS: ${1 / ddt * 1e3}`);
+        }
 
         await driver._executeStateFrame(t, dt, ddt)
 
