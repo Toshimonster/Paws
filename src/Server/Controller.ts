@@ -3,8 +3,8 @@ const OS = require("os")
 
 const GATT_Descriptor = {
     //From https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
-    Characteristic_User_Description: 2901,
-    Characteristic_Presentation_Format: 2904
+    Characteristic_User_Description: "2901",
+    Characteristic_Presentation_Format: "2904"
 }
 const GATT_Characteristic_Presentation_Formats = {
     //From https://developer.nordicsemi.com/nRF5_SDK/nRF51_SDK_v4.x.x/doc/html/group___b_l_e___g_a_t_t___c_p_f___f_o_r_m_a_t_s.html
@@ -33,6 +33,7 @@ const GATT_Characteristic_Presentation_Formats = {
 }
 export class Controller {
     public readonly Name: string = "P.A.W.S Controller"
+
     private serviceUuids: ReadonlyArray<string> = []
 
     constructor() {
@@ -52,11 +53,11 @@ export class Controller {
             if (!err) {
                 Bleno.setServices([
                     new Bleno.PrimaryService({
-                        uuid: '',
+                        uuid: "f000",
                         characteristics: [
                             new Bleno.Characteristic({
-                                uuid: '',
-                                properties: [],
+                                uuid: 'f001',
+                                properties: ["read"],
                                 secure: [],
                                 value: null,
                                 descriptors: [
@@ -66,15 +67,15 @@ export class Controller {
                                     }),
                                     new Bleno.Descriptor({
                                         uuid: GATT_Descriptor.Characteristic_Presentation_Format,
-                                        value: GATT_Characteristic_Presentation_Formats.UINT64
+                                        value: '4 byte LE Float'
                                     })
                                 ],
                                 onReadRequest: (offset, callback) => {
                                     if (offset) {
                                         callback(Bleno.Characteristic.RESULT_ATTR_NOT_LONG, null)
                                     } else {
-                                        let data = Buffer.allocUnsafe(8)
-                                        data.writeBigUInt64BE(OS.uptime())
+                                        let data = Buffer.alloc(4)
+                                        data.writeFloatLE(2629746 )
                                         callback(Bleno.Characteristic.RESULT_SUCCESS, data)
                                     }
                                 },
