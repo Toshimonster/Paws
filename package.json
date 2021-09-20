@@ -14,7 +14,8 @@
     "uploadToPi": "scp -rp ./build/* toshi@192.168.1.94:~/PAWS/ && scp ./package.json toshi@192.168.1.94:~/PAWS/",
     "runOnPi": "ssh 192.168.1.94 \"cd ~/PAWS/ && sudo pm2 start ./main\"",
     "buildAndSend": "npm run build && npm run uploadToPi",
-    "buildSendAndRun": "npm run buildAndSend && npm run runOnPi"
+    "buildSendAndRun": "npm run buildAndSend && npm run runOnPi",
+    "buildAndRun":  "npm run build && node ./build/main"
   },
   "keywords": [],
   "author": "",

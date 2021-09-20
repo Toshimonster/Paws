@@ -1,11 +1,10 @@
 import Paws from './index'
-import {Interface} from "readline";
 
-import {Controller} from "./Server";
+//import {Controller} from "./Server";
 
-const CTL = new Controller()
+//const CTL = new Controller()
 
-/*const Proto = new Paws.Driver({
+const Proto = new Paws.Driver({
     showFPS: true
 })
 
@@ -24,7 +23,6 @@ Proto.addInterfaces([
         {
             matrixOpts: {
                 ...Paws.Interfaces.RpiMatrixInterface.defaultMatrixOptions(),
-
                 rows: 32,
                 cols: 64,
                 chainLength: 2
@@ -38,7 +36,7 @@ Proto.addInterfaces([
     ),
 
     new Paws.Interfaces.Ws281xInterface(
-        "Ws2812b", 378, {
+        "Ws2812b", 61*2, {
             gpio: 21,
             stripType: 'ws2812',
             brightness: 10
@@ -67,4 +65,4 @@ Proto.on('ready', (driver) => {
     console.log('Ready!')
 })
 
-Proto.start()*/
+Proto.start()
